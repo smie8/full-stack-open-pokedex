@@ -1,12 +1,11 @@
-const express = require("express");
-const { prototype } = require("html-webpack-plugin");
-const app = express();
+const express = require('express')
+const app = express()
 
 // Heroku dynamically sets a port
-const PORT = process.env.PORT || 5500;
+const PORT = process.env.PORT || 5500
 
-app.use(express.static("dist"));
+app.use(express.static('dist'))
 
 app.listen(PORT, () => {
-  console.log("server started on port " + PORT.toString());
-});
+  console.log('server started on port ' + PORT.toString())
+})
