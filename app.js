@@ -9,3 +9,11 @@ app.use(express.static('dist'))
 app.listen(PORT, () => {
   console.log('server started on port ' + PORT.toString())
 })
+
+app.get('/health', (req, res) => {
+  res.send('ok')
+})
+
+app.get('/version', (req, res) => {
+  res.send(HEROKU_RELEASE_VERSION) // TODO: change this string to ensure a new version deployed
+})
