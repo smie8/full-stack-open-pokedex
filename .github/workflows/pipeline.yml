@@ -40,3 +40,14 @@ jobs:
           healthcheck: "https://full-stack-open-pokedex-smie8.herokuapp.com/health"
           checkstring: "ok"
           rollbackonhealthcheckfailed: true
+  tag_release:
+    needs: [simple_deployment_pipeline]
+    runs-on: ubuntu-20.04
+    steps:
+      - name: bump up version and push tag
+        uses: anothrNick/github-tag-action@1.36.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DEFAULT_BUMP: patch
+        if: ${{ github.event_name == 'push' }}
+
