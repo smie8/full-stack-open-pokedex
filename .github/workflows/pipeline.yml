@@ -52,8 +52,16 @@ jobs:
         if: ${{ failure() }}
         with:
           severity: error
-          details: Build failed!
-          description: See commit ${{ github.sha }}
+          details: >
+            - Event: ${{ github.event_name }}
+            - Repo: ${{ github.repository }}
+            - Ref: ${{ github.ref }}
+            - Workflow: ${{ github.workflow }}
+            - Author: ${{ github.repository_owner }}
+            - Committer: 
+            - Pusher: ${{ github.actor }}
+            - Commit URL: ${{ github.server_url }}/${{ github.repository }}/${{ github.sha }}
+          description: Build failed!
           webhookUrl: ${{ secrets.DISCORD_WEBHOOK_URL }}
   tag_release:
     needs: [simple_deployment_pipeline]
