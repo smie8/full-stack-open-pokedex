@@ -34,12 +34,27 @@ jobs:
         uses: akhileshns/heroku-deploy@v3.12.12
         if: ${{ github.event_name == 'push'  && !contains(join(github.event.commits.*.message, ' '), '#skip') }}
         with:
-          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
           heroku_app_name: "full-stack-open-pokedex-smie8"
-          heroku_email: ${{secrets.EMAIL}}
+          heroku_email: ${{ secrets.EMAIL }}
           healthcheck: "https://full-stack-open-pokedex-smie8.herokuapp.com/health"
           checkstring: "ok"
           rollbackonhealthcheckfailed: true
+      - name: notify new version
+        uses: rjstone/discord-webhook-notify@v1
+        if: ${{ success() }}
+        with:
+          severity: info
+          details: New version released!
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK_URL }}
+      - name: notify failure
+        uses: rjstone/discord-webhook-notify@v1
+        if: ${{ failure() }}
+        with:
+          severity: error
+          details: Build failed!
+          description: See commit ${{ github.sha }}
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK_URL }}
   tag_release:
     needs: [simple_deployment_pipeline]
     runs-on: ubuntu-20.04
@@ -51,4 +66,3 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DEFAULT_BUMP: patch
         if: ${{ github.event_name == 'push' && !contains(join(github.event.commits.*.message, ' '), '#skip') }}
-
