@@ -52,15 +52,14 @@ jobs:
         if: ${{ failure() }}
         with:
           severity: error
-          details: >
+          details: |
             - Event: ${{ github.event_name }}
             - Repo: ${{ github.repository }}
             - Ref: ${{ github.ref }}
             - Workflow: ${{ github.workflow }}
             - Author: ${{ github.repository_owner }}
-            - Committer: 
             - Pusher: ${{ github.actor }}
-            - Commit URL: ${{ github.server_url }}/${{ github.repository }}/${{ github.sha }}
+            - Commit URL: ${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }}
           description: Build failed!
           webhookUrl: ${{ secrets.DISCORD_WEBHOOK_URL }}
   tag_release:
